@@ -1,0 +1,130 @@
+"use client";
+
+import { useState } from "react";
+import { questions } from "@/data/questions";
+import { QuestionCard } from "@/components/question-card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { motion, AnimatePresence } from "framer-motion";
+import { Loader2, CheckCircle2 } from "lucide-react";
+
+export default function Home() {
+  const [step, setStep] = useState<'welcome' | 'test' | 'submitting' | 'success'>('welcome');
+  const [name, setName] = useState("");
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [answers, setAnswers] = useState<Record<number, 'A' | 'B'>>({});
+
+  const handleStart = () => {
+    if (name.trim()) setStep('test');
+  };
+
+  const handleAnswer = (choice: 'A' | 'B') => {
+    const question = questions[currentQuestionIndex];
+    setAnswers(prev => ({ ...prev, [question.id]: choice }));
+
+    if (currentQuestionIndex < questions.length - 1) {
+      setTimeout(() => setCurrentQuestionIndex(prev => prev + 1), 150);
+    } else {
+      submitTest({ ...answers, [question.id]: choice });
+    }
+  };
+
+  const submitTest = async (finalAnswers: Record<number, 'A' | 'B'>) => {
+    setStep('submitting');
+    try {
+      await fetch('/api/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, answers: finalAnswers })
+      });
+      setStep('success');
+    } catch (error) {
+      console.error(error);
+      alert("Something went wrong submitting. Please try again.");
+      setStep('test');
+    }
+  };
+
+  return (
+    <main className="min-h-screen bg-background flex flex-col items-center justify-center p-4">
+      <div className="w-full max-w-4xl">
+        <AnimatePresence mode="wait">
+          {step === 'welcome' && (
+            <motion.div
+              key="welcome"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="text-center space-y-8 max-w-lg mx-auto"
+            >
+              <div className="space-y-4">
+                <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-foreground">
+                  Personality <span className="text-primary">Insight</span>
+                </h1>
+                <p className="text-xl text-muted-foreground">
+                  Discover your Myers-Briggs Type Indicator (MBTI) profile and see how you fit within the team.
+                </p>
+              </div>
+
+              <div className="space-y-4 pt-8">
+                <Input
+                  placeholder="Enter your full name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="text-lg py-6"
+                />
+                <Button size="lg" className="w-full text-lg h-14" disabled={!name} onClick={handleStart}>
+                  Start Assessment
+                </Button>
+              </div>
+            </motion.div>
+          )}
+
+          {step === 'test' && (
+            <QuestionCard
+              key="question"
+              question={questions[currentQuestionIndex]}
+              current={currentQuestionIndex + 1}
+              total={questions.length}
+              onAnswer={handleAnswer}
+            />
+          )}
+
+          {step === 'submitting' && (
+            <motion.div
+              key="submitting"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex flex-col items-center justify-center space-y-4"
+            >
+              <Loader2 className="w-12 h-12 animate-spin text-primary" />
+              <p className="text-lg text-muted-foreground">Analyzing your responses...</p>
+            </motion.div>
+          )}
+
+          {step === 'success' && (
+            <motion.div
+              key="success"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="text-center space-y-6 max-w-lg mx-auto"
+            >
+              <div className="flex justify-center">
+                <div className="rounded-full bg-green-100 p-6 dark:bg-green-900/30">
+                  <CheckCircle2 className="w-16 h-16 text-green-600 dark:text-green-400" />
+                </div>
+              </div>
+              <h2 className="text-3xl font-bold">Assessment Complete!</h2>
+              <p className="text-lg text-muted-foreground">
+                Thank you, {name}. Your results have been securely recorded and sent to the administrator.
+              </p>
+              <Button variant="outline" onClick={() => window.location.reload()}>
+                Start Over
+              </Button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </main>
+  );
+}
