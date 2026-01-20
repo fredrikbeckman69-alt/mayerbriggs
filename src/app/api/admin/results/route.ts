@@ -1,12 +1,11 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+import { sql } from '@/lib/db';
 import { UserResult } from '@/lib/types';
 
 export async function GET() {
     try {
         // In a real app, verify authentication here (session/cookie)
-        const stmt = db.prepare('SELECT * FROM users ORDER BY timestamp DESC');
-        const rows = stmt.all();
+        const { rows } = await sql`SELECT * FROM users ORDER BY timestamp DESC`;
 
         const results: UserResult[] = rows.map((row: any) => ({
             id: row.id,

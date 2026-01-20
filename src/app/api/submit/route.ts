@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+import { sql } from '@/lib/db';
 import { calculateScore } from '@/lib/scoring';
 import { randomUUID } from 'crypto';
 import nodemailer from 'nodemailer';
@@ -18,23 +18,12 @@ export async function POST(request: Request) {
         const timestamp = new Date().toISOString();
 
         // Save to DB
-        const insert = db.prepare(`
+        await sql`
       INSERT INTO users (id, name, email, answers, type, scores, timestamp)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
-    `);
+      VALUES (${id}, ${name}, ${null}, ${JSON.stringify(answers)}, ${type}, ${JSON.stringify(scores)}, ${timestamp})
+    `;
 
-        insert.run(
-            id,
-            name,
-            null, // Email optional for now
-            JSON.stringify(answers),
-            type,
-            JSON.stringify(scores),
-            timestamp
-        );
-
-        // Send Email (Async, don't block response?)
-        // Ideally we await it to ensure it sends, or use a queue. For now await.
+        // Send Email
         try {
             await sendEmailNotification(name, type, scores);
         } catch (emailError: any) {
