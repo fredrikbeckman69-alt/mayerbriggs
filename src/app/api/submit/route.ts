@@ -3,6 +3,8 @@ import { sql } from '@/lib/db';
 import { calculateScore } from '@/lib/scoring';
 import { randomUUID } from 'crypto';
 import { Resend } from 'resend';
+import { mbtiDescriptions } from '@/data/mbti-personalities';
+import { generateEmailHtml } from '@/lib/email-template';
 
 export async function POST(request: Request) {
     try {
@@ -39,6 +41,13 @@ export async function POST(request: Request) {
 
 async function sendEmailNotification(name: string, type: string, scores: any) {
     const apiKey = process.env.RESEND_API_KEY;
+    const personality = mbtiDescriptions[type] || {
+        title: type,
+        description: "Ingen beskrivning tillgänglig.",
+        strengths: [],
+        weaknesses: [],
+        workplace: ""
+    };
 
     if (!apiKey) {
         console.log(`[Mock Email - Missing RESEND_API_KEY] To: Admin, Subject: MBTI Result for ${name}, Body: Type ${type}`);
@@ -46,25 +55,17 @@ async function sendEmailNotification(name: string, type: string, scores: any) {
     }
 
     const resend = new Resend(apiKey);
-    const adminEmail = process.env.ADMIN_EMAIL || 'onboarding@resend.dev'; // Default to authorized test email if not set
-
-    // Note: 'onboarding@resend.dev' allows testing without verifying a domain.
-    // Once you verify a domain in Resend, you can change 'from' to something like 'noreply@yourdomain.com'
+    const adminEmail = process.env.ADMIN_EMAIL || 'onboarding@resend.dev';
     const fromEmail = 'onboarding@resend.dev';
+
+    const htmlContent = generateEmailHtml(name, type, scores);
 
     const result = await resend.emails.send({
         from: fromEmail,
         to: adminEmail,
-        subject: `New MBTI Result: ${name} - ${type}`,
-        text: `Candidate: ${name}\nType: ${type}\n\nScores:\n${JSON.stringify(scores, null, 2)}`,
-        html: `
-      <h2>New Test Submission</h2>
-      <p><strong>Candidate:</strong> ${name}</p>
-      <p><strong>Result Type:</strong> ${type}</p>
-      <hr/>
-      <h3>Detailed Scores</h3>
-      <pre>${JSON.stringify(scores, null, 2)}</pre>
-    `
+        subject: `Resultat ${name}: ${personality.title}`,
+        text: `Kandidat: ${name}\nTyp: ${personality.title}\n\n${personality.description}\n\nPå Arbetsplatsen:\n${personality.workplace}`,
+        html: htmlContent
     });
 
     if (result.error) {

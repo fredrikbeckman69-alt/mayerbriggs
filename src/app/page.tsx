@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { questions } from "@/data/questions";
 import { QuestionCard } from "@/components/question-card";
 import { Button } from "@/components/ui/button";
@@ -46,7 +47,7 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-background flex flex-col items-center justify-center p-4">
+    <main className="min-h-screen bg-background flex flex-col items-center justify-center p-4 selection:bg-primary/20">
       <div className="w-full max-w-4xl">
         <AnimatePresence mode="wait">
           {step === 'welcome' && (
@@ -57,23 +58,40 @@ export default function Home() {
               exit={{ opacity: 0, y: -20 }}
               className="text-center space-y-8 max-w-lg mx-auto"
             >
+              <div className="flex justify-center mb-8">
+                <div className="relative w-48 h-48 md:w-64 md:h-64">
+                  <Image
+                    src="/logo.png"
+                    alt="Skyddsprodukter Logo"
+                    fill
+                    className="object-contain"
+                    priority
+                  />
+                </div>
+              </div>
+
               <div className="space-y-4">
-                <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-foreground">
+                <h1 className="text-4xl md:text-6xl font-serif font-bold tracking-tight text-foreground">
                   Personlighets<span className="text-primary">Profil</span>
                 </h1>
-                <p className="text-xl text-muted-foreground">
-                  Testet är utformat enligt Meyer-Briggs modell och ger ett resultat i form av en profil. Profilen mejlas till Fredrik som sammanställer resultaten från alla anställda.
+                <p className="text-xl text-muted-foreground font-sans">
+                  Testet är utformat enligt Meyer-Briggs modell. Profilen mejlas till Fredrik som sammanställer resultaten.
                 </p>
               </div>
 
               <div className="space-y-4 pt-8">
                 <Input
-                  placeholder="Ange ditt fullständiga namn"
+                  placeholder="ANGE DITT NAMN"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="text-lg py-6"
+                  className="text-lg py-6 text-center border-2 focus-visible:ring-primary/20 uppercase tracking-wider placeholder:normal-case font-serif"
                 />
-                <Button size="lg" className="w-full text-lg h-14" disabled={!name} onClick={handleStart}>
+                <Button
+                  size="lg"
+                  className="w-full text-lg h-14 uppercase tracking-widest font-bold font-sans shadow-lg hover:shadow-xl transition-all"
+                  disabled={!name}
+                  onClick={handleStart}
+                >
                   Starta Testet
                 </Button>
               </div>
