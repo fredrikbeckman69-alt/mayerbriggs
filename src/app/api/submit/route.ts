@@ -52,7 +52,7 @@ async function sendEmailNotification(name: string, type: string, scores: any) {
     // Once you verify a domain in Resend, you can change 'from' to something like 'noreply@yourdomain.com'
     const fromEmail = 'onboarding@resend.dev';
 
-    await resend.emails.send({
+    const result = await resend.emails.send({
         from: fromEmail,
         to: adminEmail,
         subject: `New MBTI Result: ${name} - ${type}`,
@@ -66,4 +66,11 @@ async function sendEmailNotification(name: string, type: string, scores: any) {
       <pre>${JSON.stringify(scores, null, 2)}</pre>
     `
     });
+
+    if (result.error) {
+        console.error("Resend API Error:", result.error);
+        throw new Error(`Resend failed: ${result.error.message}`);
+    } else {
+        console.log("Resend API Success:", result.data);
+    }
 }
