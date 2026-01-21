@@ -61,7 +61,7 @@ async function sendEmailNotification(name: string, type: string, scores: any) {
     });
 
     const mailOptions = {
-        from: '"MBTI App" <no-reply@mbti-app.local>',
+        from: `"MBTI App" <${user}>`, // Use authenticated user as sender to avoid spam blocks
         to: process.env.ADMIN_EMAIL || 'admin@example.com', // User defined email
         subject: `New MBTI Result: ${name} - ${type}`,
         text: `Candidate: ${name}\nType: ${type}\n\nScores:\n${JSON.stringify(scores, null, 2)}`,
