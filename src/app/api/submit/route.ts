@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { sql } from '@/lib/db';
 import { calculateScore } from '@/lib/scoring';
 import { randomUUID } from 'crypto';
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 
 export async function POST(request: Request) {
     try {
@@ -23,14 +23,11 @@ export async function POST(request: Request) {
       VALUES (${id}, ${name}, ${null}, ${JSON.stringify(answers)}, ${type}, ${JSON.stringify(scores)}, ${timestamp})
     `;
 
-        // Send Email
+        // Send Email via Resend
         try {
             await sendEmailNotification(name, type, scores);
         } catch (emailError: any) {
             console.error("Failed to send email:", emailError);
-            if (emailError.response) {
-                console.error("SMTP Response:", emailError.response);
-            }
         }
 
         return NextResponse.json({ success: true, id });
@@ -41,28 +38,23 @@ export async function POST(request: Request) {
 }
 
 async function sendEmailNotification(name: string, type: string, scores: any) {
-    // Placeholder transporter - needs real credentials from user
-    // For now, logging credentials if not provided
-    const host = process.env.EMAIL_HOST || 'smtp.example.com';
-    const port = parseInt(process.env.EMAIL_PORT || '587');
-    const user = process.env.EMAIL_USER;
-    const pass = process.env.EMAIL_PASS;
+    const apiKey = process.env.RESEND_API_KEY;
 
-    if (!user || !pass) {
-        console.log(`[Mock Email] To: Admin, Subject: MBTI Result for ${name}, Body: Type ${type}`);
+    if (!apiKey) {
+        console.log(`[Mock Email - Missing RESEND_API_KEY] To: Admin, Subject: MBTI Result for ${name}, Body: Type ${type}`);
         return;
     }
 
-    const transporter = nodemailer.createTransport({
-        host,
-        port,
-        secure: port === 465, // true for 465, false for other ports
-        auth: { user, pass },
-    });
+    const resend = new Resend(apiKey);
+    const adminEmail = process.env.ADMIN_EMAIL || 'onboarding@resend.dev'; // Default to authorized test email if not set
 
-    const mailOptions = {
-        from: `"MBTI App" <${user}>`, // Use authenticated user as sender to avoid spam blocks
-        to: process.env.ADMIN_EMAIL || 'admin@example.com', // User defined email
+    // Note: 'onboarding@resend.dev' allows testing without verifying a domain.
+    // Once you verify a domain in Resend, you can change 'from' to something like 'noreply@yourdomain.com'
+    const fromEmail = 'onboarding@resend.dev';
+
+    await resend.emails.send({
+        from: fromEmail,
+        to: adminEmail,
         subject: `New MBTI Result: ${name} - ${type}`,
         text: `Candidate: ${name}\nType: ${type}\n\nScores:\n${JSON.stringify(scores, null, 2)}`,
         html: `
@@ -73,7 +65,5 @@ async function sendEmailNotification(name: string, type: string, scores: any) {
       <h3>Detailed Scores</h3>
       <pre>${JSON.stringify(scores, null, 2)}</pre>
     `
-    };
-
-    await transporter.sendMail(mailOptions);
+    });
 }
