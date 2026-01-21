@@ -62,7 +62,7 @@ export default function Home() {
                   Personlighets<span className="text-primary">Profil</span>
                 </h1>
                 <p className="text-xl text-muted-foreground">
-                  Upptäck din MBTI-profil och se hur du passar in i teamet.
+                  Testet är utformat enligt Meyer-Briggs modell och ger ett resultat i form av en profil. Profilen mejlas till Fredrik som sammanställer resultaten från alla anställda.
                 </p>
               </div>
 
