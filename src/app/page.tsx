@@ -40,7 +40,7 @@ export default function Home() {
       setStep('success');
     } catch (error) {
       console.error(error);
-      alert("Something went wrong submitting. Please try again.");
+      alert("Något gick fel vid inskickandet. Försök igen.");
       setStep('test');
     }
   };
@@ -59,22 +59,22 @@ export default function Home() {
             >
               <div className="space-y-4">
                 <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-foreground">
-                  Personality <span className="text-primary">Insight</span>
+                  Personlighets<span className="text-primary">Profil</span>
                 </h1>
                 <p className="text-xl text-muted-foreground">
-                  Discover your Myers-Briggs Type Indicator (MBTI) profile and see how you fit within the team.
+                  Upptäck din MBTI-profil och se hur du passar in i teamet.
                 </p>
               </div>
 
               <div className="space-y-4 pt-8">
                 <Input
-                  placeholder="Enter your full name"
+                  placeholder="Ange ditt fullständiga namn"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className="text-lg py-6"
                 />
                 <Button size="lg" className="w-full text-lg h-14" disabled={!name} onClick={handleStart}>
-                  Start Assessment
+                  Starta Testet
                 </Button>
               </div>
             </motion.div>
@@ -98,7 +98,7 @@ export default function Home() {
               className="flex flex-col items-center justify-center space-y-4"
             >
               <Loader2 className="w-12 h-12 animate-spin text-primary" />
-              <p className="text-lg text-muted-foreground">Analyzing your responses...</p>
+              <p className="text-lg text-muted-foreground">Analyserar dina svar...</p>
             </motion.div>
           )}
 
@@ -114,12 +114,12 @@ export default function Home() {
                   <CheckCircle2 className="w-16 h-16 text-green-600 dark:text-green-400" />
                 </div>
               </div>
-              <h2 className="text-3xl font-bold">Assessment Complete!</h2>
+              <h2 className="text-3xl font-bold">Klar!</h2>
               <p className="text-lg text-muted-foreground">
-                Thank you, {name}. Your results have been securely recorded and sent to the administrator.
+                Tack, {name}. Dina resultat har sparats säkert och skickats till administratören.
               </p>
               <Button variant="outline" onClick={() => window.location.reload()}>
-                Start Over
+                Börja om
               </Button>
             </motion.div>
           )}

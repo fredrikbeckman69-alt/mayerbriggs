@@ -1,6 +1,7 @@
 import { Question } from "@/lib/types";
 import { Button } from "./ui/button";
 import { motion } from "framer-motion";
+import * as React from "react";
 
 interface QuestionCardProps {
     question: Question;
@@ -10,6 +11,13 @@ interface QuestionCardProps {
 }
 
 export function QuestionCard({ question, onAnswer, total, current }: QuestionCardProps) {
+    const [imageError, setImageError] = React.useState(false);
+
+    // Reset error state when question changes
+    React.useEffect(() => {
+        setImageError(false);
+    }, [question.id]);
+
     return (
         <motion.div
             initial={{ opacity: 0, x: 20 }}
@@ -22,6 +30,19 @@ export function QuestionCard({ question, onAnswer, total, current }: QuestionCar
                 <span className="text-sm font-medium text-muted-foreground bg-secondary px-3 py-1 rounded-full">
                     Question {current} / {total}
                 </span>
+
+                {!imageError && (
+                    <div className="relative w-full aspect-video max-h-[300px] mx-auto overflow-hidden rounded-lg mb-6">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                            src={`/images/questions/q${question.id}.png`}
+                            alt={question.text}
+                            className="object-contain w-full h-full"
+                            onError={() => setImageError(true)}
+                        />
+                    </div>
+                )}
+
                 <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
                     {question.text}
                 </h2>
