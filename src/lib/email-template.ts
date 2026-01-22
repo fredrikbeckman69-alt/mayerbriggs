@@ -22,15 +22,15 @@ export function generateEmailHtml(name: string, type: string, scores: any) {
 
         return `
         <div style="margin-bottom: 12px;">
-            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px; color: #666;">
+            <div class="dim-labels" style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px; color: #666;">
                 <span>${dim.left}</span>
                 <span>${dim.right}</span>
             </div>
-            <div style="height: 8px; background: #eee; border-radius: 4px; overflow: hidden; display: flex;">
+            <div class="progress-bg" style="height: 8px; background: #eee; border-radius: 4px; overflow: hidden; display: flex;">
                 <div style="width: ${leftPercent}%; background: #4f46e5;"></div>
-                <div style="width: ${rightPercent}%; background: #e5e7eb;"></div>
+                <div class="progress-remain" style="width: ${rightPercent}%; background: #e5e7eb;"></div>
             </div>
-             <div style="display: flex; justify-content: space-between; font-size: 10px; margin-top: 2px; color: #999;">
+             <div class="dim-scores" style="display: flex; justify-content: space-between; font-size: 10px; margin-top: 2px; color: #999;">
                 <span>${dim.leftScore}p</span>
                 <span>${dim.rightScore}p</span>
             </div>
@@ -40,9 +40,14 @@ export function generateEmailHtml(name: string, type: string, scores: any) {
 
     return `
     <!DOCTYPE html>
-    <html>
+    <html lang="sv">
     <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="color-scheme" content="light dark">
+        <meta name="supported-color-schemes" content="light dark">
         <style>
+            /* Base Styles (Light Mode Default) */
             body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.5; color: #333; margin: 0; padding: 0; background-color: #f9fafb; }
             .container { max-width: 600px; margin: 40px auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
             .header { background: #4f46e5; padding: 32px; text-align: center; color: white; }
@@ -55,6 +60,29 @@ export function generateEmailHtml(name: string, type: string, scores: any) {
             .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
             .list-item { margin-bottom: 8px; padding-left: 16px; border-left: 3px solid #4f46e5; }
             .footer { background: #f9fafb; padding: 24px; text-align: center; font-size: 12px; color: #666; border-top: 1px solid #eee; }
+            .description-text { color: #4b5563; }
+            .workplace-text { color: #4b5563; }
+            .score-section { background: #f9fafb; padding: 20px; border-radius: 8px; }
+
+            /* Dark Mode Overrides */
+            @media (prefers-color-scheme: dark) {
+                body { background-color: #111827 !important; color: #f3f4f6 !important; }
+                .container { background-color: #1f2937 !important; box-shadow: none !important; }
+                .header { background: #3730a3 !important; } /* Darker Indigo */
+                .section-title { color: #f3f4f6 !important; border-bottom-color: #374151 !important; }
+                .tag { background: #312e81 !important; color: #c7d2fe !important; }
+                .list-item { color: #e5e7eb !important; border-left-color: #6366f1 !important; }
+                .footer { background: #111827 !important; color: #9ca3af !important; border-top-color: #374151 !important; }
+                .description-text, .workplace-text { color: #d1d5db !important; }
+                h2 { color: #f3f4f6 !important; }
+                
+                /* Score Bars Dark Mode */
+                .dim-labels { color: #9ca3af !important; }
+                .dim-scores { color: #6b7280 !important; }
+                .score-section { background: #111827 !important; border: 1px solid #374151 !important; }
+                .progress-bg { background: #374151 !important; }
+                .progress-remain { background: #374151 !important; }
+            }
         </style>
     </head>
     <body>
@@ -70,7 +98,7 @@ export function generateEmailHtml(name: string, type: string, scores: any) {
                 </div>
 
                 <div class="section">
-                    <p style="font-size: 16px; color: #4b5563;">${personality.description}</p>
+                    <p class="description-text" style="font-size: 16px; color: #4b5563;">${personality.description}</p>
                 </div>
 
                 <div class="section">
@@ -88,16 +116,16 @@ export function generateEmailHtml(name: string, type: string, scores: any) {
 
                 <div class="section">
                     <div class="section-title">På Arbetsplatsen</div>
-                    <p style="color: #4b5563;">${personality.workplace}</p>
+                    <p class="workplace-text" style="color: #4b5563;">${personality.workplace}</p>
                 </div>
 
-                <div class="section" style="background: #f9fafb; padding: 20px; border-radius: 8px;">
+                <div class="section score-section" style="background: #f9fafb; padding: 20px; border-radius: 8px;">
                     <div class="section-title" style="border: none; margin-bottom: 12px;">Poängfördelning</div>
                     ${dimensionRows}
                 </div>
             </div>
             <div class="footer">
-                Detta är ett automatiskt meddelande från Mayer Briggs Personlighetstest.
+                Detta är ett automatiskt meddelande från Meyer Briggs Personlighetstest.
             </div>
         </div>
     </body>

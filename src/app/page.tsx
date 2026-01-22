@@ -14,17 +14,24 @@ export default function Home() {
   const [name, setName] = useState("");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, 'A' | 'B'>>({});
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleStart = () => {
     if (name.trim()) setStep('test');
   };
 
   const handleAnswer = (choice: 'A' | 'B') => {
+    if (isProcessing) return;
+    setIsProcessing(true);
+
     const question = questions[currentQuestionIndex];
     setAnswers(prev => ({ ...prev, [question.id]: choice }));
 
     if (currentQuestionIndex < questions.length - 1) {
-      setTimeout(() => setCurrentQuestionIndex(prev => prev + 1), 150);
+      setTimeout(() => {
+        setCurrentQuestionIndex(prev => prev + 1);
+        setIsProcessing(false);
+      }, 150);
     } else {
       submitTest({ ...answers, [question.id]: choice });
     }
@@ -94,6 +101,20 @@ export default function Home() {
                 >
                   Starta Testet
                 </Button>
+              </div>
+
+              <div className="space-y-2">
+                <p className="text-sm text-muted-foreground font-sans">
+                  Här kan du läsa mer om hur testet fungerar
+                </p>
+                <a
+                  href="https://sv.wikipedia.org/wiki/Myers-Briggs_Type_Indicator"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-primary hover:underline break-all"
+                >
+                  https://sv.wikipedia.org/wiki/Myers-Briggs_Type_Indicator
+                </a>
               </div>
             </motion.div>
           )}

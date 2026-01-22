@@ -1,5 +1,5 @@
 @echo off
-echo Starting Mayer Briggs Application...
+echo Starting Meyer Briggs Application...
 echo.
 echo =========================================================
 echo  NETWORK ACCESS INFO

@@ -1,5 +1,5 @@
 @echo off
-echo Starting Mayer Briggs Application in DEVELOPMENT MODE...
+echo Starting Meyer Briggs Application in DEVELOPMENT MODE...
 echo.
 echo =========================================================
 echo  Changes to code will be visible immediately
