@@ -20,49 +20,52 @@ export function QuestionCard({ question, onAnswer, total, current }: QuestionCar
 
     return (
         <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
+            initial={{ opacity: 0, y: 20, filter: "blur(10px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            exit={{ opacity: 0, y: -20, filter: "blur(10px)" }}
+            transition={{ duration: 0.4 }}
             key={question.id}
-            className="w-full max-w-2xl mx-auto space-y-8"
+            className="w-full max-w-3xl mx-auto space-y-8 glass-card p-8 md:p-10 rounded-[2.5rem]"
         >
-            <div className="space-y-4 text-center">
-                <span className="text-sm font-medium text-muted-foreground bg-secondary px-3 py-1 rounded-full">
+            <div className="space-y-6 text-center">
+                <span className="text-xs font-semibold tracking-widest text-white/50 bg-white/5 px-4 py-1.5 rounded-full uppercase">
                     Question {current} / {total}
                 </span>
 
                 {!imageError && (
-                    <div className="relative w-full aspect-video max-h-[300px] mx-auto overflow-hidden rounded-lg mb-6">
+                    <div className="relative w-full aspect-video max-h-[300px] mx-auto overflow-hidden rounded-2xl border border-white/10 shadow-lg">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                             src={`/images/questions/q${question.id}.png`}
                             alt={question.text}
-                            className="object-contain w-full h-full"
+                            className="object-contain w-full h-full bg-black/20"
                             onError={() => setImageError(true)}
                         />
                     </div>
                 )}
 
-                <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
+                <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-white leading-tight">
                     {question.text}
                 </h2>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <button
                     onClick={() => onAnswer('A')}
-                    className="group relative p-6 h-40 text-left rounded-xl border-2 border-border bg-card hover:border-primary/50 hover:bg-accent transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                    className="group relative p-8 h-auto min-h-[180px] text-left rounded-3xl border border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/30 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white/50"
                 >
-                    <span className="absolute top-4 left-4 text-xs font-semibold uppercase tracking-wider text-muted-foreground group-hover:text-primary">Option A</span>
-                    <p className="mt-6 text-lg font-medium leading-relaxed">{question.optionA}</p>
+                    <span className="absolute top-6 left-6 text-[10px] font-bold uppercase tracking-widest text-white/40 group-hover:text-siri-blue transition-colors">Alternative A</span>
+                    <p className="mt-8 text-xl font-light text-white/90 leading-relaxed group-hover:text-white">{question.optionA}</p>
+                    <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
                 </button>
 
                 <button
                     onClick={() => onAnswer('B')}
-                    className="group relative p-6 h-40 text-left rounded-xl border-2 border-border bg-card hover:border-primary/50 hover:bg-accent transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                    className="group relative p-8 h-auto min-h-[180px] text-left rounded-3xl border border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/30 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white/50"
                 >
-                    <span className="absolute top-4 left-4 text-xs font-semibold uppercase tracking-wider text-muted-foreground group-hover:text-primary">Option B</span>
-                    <p className="mt-6 text-lg font-medium leading-relaxed">{question.optionB}</p>
+                    <span className="absolute top-6 left-6 text-[10px] font-bold uppercase tracking-widest text-white/40 group-hover:text-siri-pink transition-colors">Alternative B</span>
+                    <p className="mt-8 text-xl font-light text-white/90 leading-relaxed group-hover:text-white">{question.optionB}</p>
+                    <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
                 </button>
             </div>
         </motion.div>

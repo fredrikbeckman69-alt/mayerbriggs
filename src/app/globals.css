@@ -29,79 +29,80 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
 
-  --font-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-playfair), ui-serif, Georgia, serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --color-siri-blue: #38CBFF;
+  --color-siri-pink: #FE0576;
+  --color-siri-purple: #EA12B6;
+
+  --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 :root {
-  --background: 0 0% 100%;
-  --foreground: 225 7% 25%;
-  /* #3B3D44 */
+  /* Apple Siri Dark Theme */
+  --background: 0 0% 0%;
+  /* #000000 */
+  --foreground: 0 0% 96%;
+  /* #F5F5F7 */
 
-  --card: 0 0% 100%;
-  --card-foreground: 225 7% 25%;
+  --card: 240 4% 10%;
+  /* Slightly lighter than black, but will be glassy */
+  --card-foreground: 0 0% 96%;
 
-  --popover: 0 0% 100%;
-  --popover-foreground: 225 7% 25%;
+  --popover: 240 4% 10%;
+  --popover-foreground: 0 0% 96%;
 
-  --primary: 0 51% 75%;
-  /* #DF9D9D Dusty Rose */
-  --primary-foreground: 0 0% 100%;
+  --primary: 0 0% 100%;
+  /* White */
+  --primary-foreground: 0 0% 0%;
+  /* Black text on white buttons */
 
-  --secondary: 344 19% 57%;
-  /* #A67C87 Mauve */
-  --secondary-foreground: 0 0% 100%;
+  --secondary: 240 5% 15%;
+  /* Dark gray for secondary buttons */
+  --secondary-foreground: 0 0% 98%;
 
-  --muted: 0 63% 93%;
-  /* #F8E1E1 Pale Pink */
-  --muted-foreground: 344 19% 57%;
+  --muted: 240 5% 20%;
+  --muted-foreground: 240 5% 65%;
 
-  --accent: 0 63% 93%;
-  --accent-foreground: 225 7% 25%;
+  --accent: 280 80% 60%;
+  /* Purple hue for accents if needed */
+  --accent-foreground: 0 0% 100%;
 
   --destructive: 0 84.2% 60.2%;
   --destructive-foreground: 0 0% 98%;
 
-  --border: 0 51% 90%;
-  --input: 0 51% 90%;
-  --ring: 0 51% 75%;
+  --border: 0 0% 20%;
+  --input: 0 0% 20%;
+  --ring: 280 80% 60%;
 
-  --radius: 0.7rem;
-  /* 11px */
+  --radius: 1.5rem;
+  /* 24px - Large rounded corners like Apple */
 }
 
-.dark {
-  --background: 240 10% 3.9%;
-  --foreground: 0 0% 98%;
+@layer utilities {
+  .glass {
+    @apply bg-white/5 backdrop-blur-2xl border border-white/10 shadow-xl;
+  }
 
-  --card: 240 10% 3.9%;
-  --card-foreground: 0 0% 98%;
+  .glass-card {
+    @apply bg-black/40 backdrop-blur-xl border border-white/10 shadow-2xl;
+  }
 
-  --popover: 240 10% 3.9%;
-  --popover-foreground: 0 0% 98%;
+  .text-siri-gradient {
+    @apply bg-clip-text text-transparent bg-[linear-gradient(121deg, #FE0576_24%, #EA12B6_40%, #38CBFF_60%)];
+  }
 
-  --primary: 0 0% 98%;
-  --primary-foreground: 240 5.9% 10%;
+  .bg-siri-gradient {
+    @apply bg-[linear-gradient(121deg, #FE0576_24%, #EA12B6_40%, #38CBFF_60%)];
+  }
 
-  --secondary: 240 3.7% 15.9%;
-  --secondary-foreground: 0 0% 98%;
-
-  --muted: 240 3.7% 15.9%;
-  --muted-foreground: 240 5% 64.9%;
-
-  --accent: 240 3.7% 15.9%;
-  --accent-foreground: 0 0% 98%;
-
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 0 0% 98%;
-
-  --border: 240 3.7% 15.9%;
-  --input: 240 3.7% 15.9%;
-  --ring: 240 4.9% 83.9%;
+  .siri-glow {
+    box-shadow: 0 0 100px 20px rgba(56, 203, 255, 0.3);
+  }
 }
 
 @layer base {
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-background text-foreground antialiased selection:bg-fuchsia-500/30;
   }
 }

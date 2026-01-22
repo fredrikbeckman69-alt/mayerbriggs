@@ -1,21 +1,15 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Poppins, Playfair_Display } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
-const poppins = Poppins({
-  variable: "--font-poppins",
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-});
-
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "Skyddsprodukter - Personlighetsprofil",
-  description: "MBTI-baserat personlighetstest för anställda",
+  title: "Siri Personality Profile",
+  description: "MBTI-based personality assessment",
 };
 
 export default function RootLayout({
@@ -24,9 +18,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="sv">
+    <html lang="sv" className="dark">
       <body
-        className={`${poppins.variable} ${playfair.variable} antialiased font-sans`}
+        className={`${inter.variable} antialiased font-sans bg-black min-h-screen`}
       >
         {children}
       </body>
