@@ -52,20 +52,20 @@ export function QuestionCard({ question, onAnswer, total, current }: QuestionCar
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <button
                     onClick={() => onAnswer('A')}
-                    className="group relative p-8 h-auto min-h-[180px] text-left rounded-3xl border border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/30 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white/50"
+                    className="group relative p-8 h-auto min-h-[180px] text-left rounded-3xl border border-white/10 bg-white/5 hover:bg-white/10 hover:border-siri-blue/50 hover:shadow-[0_0_40px_rgba(56,203,255,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-siri-blue/50"
                 >
                     <span className="absolute top-6 left-6 text-[10px] font-bold uppercase tracking-widest text-white/40 group-hover:text-siri-blue transition-colors">Alternative A</span>
                     <p className="mt-8 text-xl font-light text-white/90 leading-relaxed group-hover:text-white">{question.optionA}</p>
-                    <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                    <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-siri-blue/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
                 </button>
 
                 <button
                     onClick={() => onAnswer('B')}
-                    className="group relative p-8 h-auto min-h-[180px] text-left rounded-3xl border border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/30 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white/50"
+                    className="group relative p-8 h-auto min-h-[180px] text-left rounded-3xl border border-white/10 bg-white/5 hover:bg-white/10 hover:border-siri-pink/50 hover:shadow-[0_0_40px_rgba(254,5,118,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-siri-pink/50"
                 >
                     <span className="absolute top-6 left-6 text-[10px] font-bold uppercase tracking-widest text-white/40 group-hover:text-siri-pink transition-colors">Alternative B</span>
                     <p className="mt-8 text-xl font-light text-white/90 leading-relaxed group-hover:text-white">{question.optionB}</p>
-                    <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                    <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-siri-pink/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
                 </button>
             </div>
         </motion.div>
